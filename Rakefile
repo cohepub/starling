@@ -17,7 +17,7 @@ ICU_LD_FLAGS = (`icu-config --ldflags` +
                 `icu-config --ldflags-icuio`).gsub(/\n/, " ")
 
 EI_LD_FLAGS  = ("-L/opt/local/lib/erlang/lib/erl_interface-3.5.5.3/lib" +
-                "-lei -lerl_interface")
+                " -lei -lerl_interface")
 
 task :default => [:app, :drv]
 
