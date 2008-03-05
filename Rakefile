@@ -11,13 +11,11 @@ ERL_FILES = Dir["#{SRC}/*.erl"].join(" ")
 DRV_FILES = Dir["#{C_SRC}/*.c"].join(" ")
 
 ICU_INCLUDE_FLAGS = `icu-config --cppflags-searchpath`.strip
-EI_INCLUDE_FLAGS = "-I/opt/local/lib/erlang/lib/erl_interface-3.5.5.3/include"
-
 ICU_LD_FLAGS = (`icu-config --ldflags` +
                 `icu-config --ldflags-icuio`).gsub(/\n/, " ")
 
-EI_LD_FLAGS  = ("-L/opt/local/lib/erlang/lib/erl_interface-3.5.5.3/lib" +
-                " -lei -lerl_interface")
+EI_INCLUDE_FLAGS = "-I#{`./findei.erl`.strip}/include"
+EI_LD_FLAGS = "-L#{`./findei.erl`.strip}/lib -lei -lerl_interface"
 
 task :default => [:app, :drv]
 
