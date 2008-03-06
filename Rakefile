@@ -28,7 +28,7 @@ task(:app) do
 end
 
 task(:drv) do
-  sh %{#{CC} #{ICU_INCLUDE_FLAGS} #{EI_INCLUDE_FLAGS} #{ICU_LD_FLAGS} #{EI_LD_FLAGS} #{DRV_FILES} -o #{File.join(BLD, "starling_drv")}} do |ok, res|
+  sh %{#{CC} #{DRV_FILES} -o #{File.join(BLD, "starling_drv")} #{ICU_INCLUDE_FLAGS} #{EI_INCLUDE_FLAGS} #{ICU_LD_FLAGS} #{EI_LD_FLAGS}} do |ok, res|
     if !ok
       puts "gcc error, status = #{res.exitstatus}"
     end
