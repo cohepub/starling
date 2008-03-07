@@ -2,14 +2,15 @@
 Starling is a Unicode text processing library for Erlang.
 It's based on ICU (http://icu-project.org/), which you need to have installed to use Starling.
 
-You can install ICU on OSX with:
-  sudo port install icu
-  (you must have MacPorts (http://www.macports.org/) installed to do this)
+`port install icu` with MacPorts on OSX
+`apt-get install libicu38 libicu-dev` on Ubuntu
 
-Starling is implemented as a C port, and packaged as an OTP application.
+You also need to have Ruby and Rake installed (the build script uses Rake).
+
+To compile, just run `rake` from Starling's root directory.
 
 Once you've compiled Starling, start the Erlang shell with:
-  erl -pa ~/path/to/starling/ebin
+`erl -pa ~/path/to/starling/ebin`
   
 You can then use Starling like this:
   
