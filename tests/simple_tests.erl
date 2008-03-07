@@ -7,7 +7,8 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -import(ustring, [new/1, len/1, len/2, eql/2, exact/2, upcase/1, downcase/1,
-                 capitalize/1, concat/2, substr/2, substr/3]).
+                  capitalize/1, concat/2, substr/2, substr/3, index/2, rindex/2,
+                  gsub/3]).
 
 %% Depends on List being bound in scope.
 -define(ks(X),
@@ -65,8 +66,33 @@ simple_test_() ->
               %% ü concat'd with ü.
               ?_assert(eql(substr(concat(?ks(uumlcomp), ?ks('Ubercomp')), 2),
                            concat(?ks(uumlcomp), ?ks(uumlcomp)))),
-                           
-              
+
+
+              %% index/rindex tests
+              %% look for precomposed ü in a string made from UTF-8 with a combined
+              %% ü
+              ?_assert(index(concat(?ks('Strasse'), ?ks('Ubercomp')),
+                             upcase(?ks(uuml))) == 7),
+              %% as above, but rindex and looking for combined ü and in precomposed
+              %% string
+              ?_assert(rindex(concat(?ks('Strasse'), ?ks('Uber')),
+                              upcase(?ks(uumlcomp))) == 7),
+
+              ?_assert(rindex(concat(?ks('Uber'), ?ks('Ubercomp')),
+                              ?ks(uuml)) == 5),
+
+              %% gsub tests
+              %% replace "ß" with "ss"
+              ?_assert(eql(gsub(?ks('Strasse'),
+                                new([195, 159]),
+                                new("ss")),
+                           new("Strasse")) == true),
+
+              ?_assert(eql(gsub(?ks('Ubercomp'),
+                                upcase(?ks(uuml)),
+                                new("U")),
+                           new("Uber")) == true),
+                          
               ?_assert(true == true)
              ]
      end
