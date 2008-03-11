@@ -6,9 +6,11 @@
 -export([start_link/1, init/1, handle_call/3, handle_cast/2, handle_info/2,
          code_change/3, terminate/2]).
 
-
 start_link(ExtProg) ->
-    gen_server:start_link({local, ?MODULE}, starling_server, ExtProg, []).
+    Path = code:priv_dir(starling),
+    PathComps = lists:reverse(tl(lists:reverse(string:tokens(Path, "/")))), %% Drop "priv"
+    DrvPath = filename:join(["/", filename:join(PathComps), "ebin", ExtProg]),
+    gen_server:start_link({local, ?MODULE}, starling_server, DrvPath, []).
 
 init(ExtProg) ->
     process_flag(trap_exit, true),
