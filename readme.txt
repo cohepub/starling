@@ -23,6 +23,9 @@ You can then use Starling like this:
   4> ustring:pr(S2).
   "HELLO"
 
-The project page is at http://code.google.com/p/starling/
+There's a couple of simple demos under demos/. You may also want to take a look at tests/.
 
-Hasan Veldstra <hasan@12monkeys.co.uk> [http://12monkeys.co.uk]
+Project's homepage: http://12monkeys.co.uk/starling
+Google Code page:   http://code.google.com/p/starling/
+
+Hasan Veldstra <hasan@12monkeys.co.uk>
