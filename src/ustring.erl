@@ -1,5 +1,5 @@
 %%% @doc Ustring - Unicode strings for Erlang.
-%%% @author Hasan Veldstra <hasan@12monkeys.co.uk> [http://12monkeys.co.uk]
+%%% @author Hasan Veldstra <hasan@12monkeys.co.uk> [http://12monkeys.co.uk/starling]
 
 -module(ustring).
 
@@ -27,7 +27,7 @@
 -define(is_binary3(Bin1, Bin2, Bin3),
         is_binary(Bin1) andalso is_binary(Bin2) andalso is_binary(Bin3)).
 
-%% @doc Creates Ustring from a list or binary of UTF-8 code units.
+%% @doc Creates a ustring from a list or binary of UTF-8 code units.
 new(List) when is_list(List) ->
     new(utf8, List);
 new(Bin) when is_binary(Bin) ->
@@ -45,7 +45,7 @@ new(utf8, Bin) when is_binary(Bin) ->
 empty() ->
     new([]).
 
-%% @doc Converts string to UTF-8.
+%% @doc Converts string to a list of UTF-8 code units.
 to(utf8, Str) when is_binary(Str) ->
     Uc = xmerl_ucs:from_utf16be(binary_to_list(Str)),
     xmerl_ucs:to_utf8(Uc).
@@ -54,13 +54,12 @@ to(utf8, Str) when is_binary(Str) ->
 pr(Str) when is_binary(Str) ->
     to(utf8, Str).
 
-%% @doc Returns length of string in graphemes (i.e. characters as users see
-%% them).
+%% @doc Returns length of string in graphemes (characters as users see them).
 len(Str) when is_binary(Str) ->
     {ok, Len} = call({lengthg, unpack(Str)++[256]}),
     Len.
 
-%% @doc Returns length of string in code units (i.e. 2-byte pairs).
+%% @doc Returns length of string in code units (2-byte pairs).
 len(Str, codeunits) when is_binary(Str) ->
     {ok, Len} = call({length, unpack(Str)++[256]}),
     Len.
@@ -75,7 +74,7 @@ downcase(Str) when is_binary(Str) ->
     {ok, Res} = call({downcase, unpack(Str)++[256]}),
     pack(Res).
 
-%% @doc Capitalizes first word in the string.
+%% @doc Capitalizes the first word in the string, leaves the rest unchanged.
 capitalize(Str) when is_binary(Str) ->
     {ok, Res} = call({capitalize, unpack(Str)++[256]}),
     pack(Res).
@@ -99,10 +98,10 @@ concat(Str1, Str2) when ?is_binary2(Str1, Str2) ->
     {ok, Res} = call({concat, unpack(Str1)++[256], unpack(Str2)++[256]}),
     pack(Res).
 
-%% @doc Get substring of length Len.
+%% @doc Get substring of length Len beginning at the first character.
 substr(Str, Len) when is_binary(Str) ->
     substr(Str, 1, Len).
-%% @doc Get substring of a string of length Len beginning at character Start.
+%% @doc Get substring of length Len beginning at character Start.
 substr(Str, Start, Len) when is_binary(Str) ->
     {ok, Res} = call({substr, unpack(Str)++[256], {Start, Len}}),
     pack(Res).
@@ -139,7 +138,7 @@ to_lower(Str) ->
 equal(Str1, Str2) ->
     exact(Str1, Str2).
 
-%% @eqiv index/2
+%% @equiv index/2
 str(Str, Substr) ->
     index(Str, Substr).
 
