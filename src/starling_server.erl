@@ -8,13 +8,14 @@
 
 start_link(ExtProg) ->
     Path = code:priv_dir(starling),
-    PathComps = lists:reverse(tl(lists:reverse(string:tokens(Path, "/")))), %% Drop "priv"
+    %% Drop "priv".
+    PathComps = lists:reverse(tl(lists:reverse(string:tokens(Path, "/")))),
     DrvPath = filename:join(["/", filename:join(PathComps), "ebin", ExtProg]),
     gen_server:start_link({local, ?MODULE}, starling_server, DrvPath, []).
 
-init(ExtProg) ->
+init(DrvPath) ->
     process_flag(trap_exit, true),
-    Port = open_port({spawn, ExtProg}, [{packet, 2}, binary, exit_status]),
+    Port = open_port({spawn, DrvPath}, [{packet, 2}, binary, exit_status]),
     {ok, #state{port = Port}}.
 
 handle_call(Msg, _From, #state{port = Port} = State) ->

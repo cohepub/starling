@@ -7,7 +7,7 @@
 
 start(_Type, _Args) ->
     {ok, ExtProg} = application:get_env(starling_app, extprog),
-    starling_sup:start_link(filename:join(["ebin", ExtProg])).
+    starling_sup:start_link(ExtProg).
 
 stop(_State) ->
     ok.
