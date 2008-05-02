@@ -8,9 +8,12 @@
 
 start_link(ExtProg) ->
     Path = code:priv_dir(starling),
-    %% Drop "priv".
-    PathComps = lists:reverse(tl(lists:reverse(string:tokens(Path, "/")))),
-    DrvPath = filename:join(["/", filename:join(PathComps), "ebin", ExtProg]),
+    DirName = filename:dirname(Path),
+    ExtProg2 = case os:type() of
+                   {win32, nt} -> ExtProg ++ ".exe";
+                   _ -> ExtProg
+               end,
+    DrvPath = filename:join(["/", DirName, "ebin", ExtProg2]),
     gen_server:start_link({local, ?MODULE}, starling_server, DrvPath, []).
 
 init(DrvPath) ->
